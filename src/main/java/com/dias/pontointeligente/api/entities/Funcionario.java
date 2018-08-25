@@ -52,7 +52,7 @@ public class Funcionario implements Serializable {
 	@Column(name = "qtd_horas_trabalho_dia", nullable = true)
 	private Float qtdHorasTrabalhoDia;
 
-	@Column(name = "qtd_horas_almoço", nullable = true)
+	@Column(name = "qtd_horas_almoco", nullable = true)
 	private Float qtdHorasAlmoco;
 
 	@Enumerated(EnumType.STRING)
@@ -172,6 +172,11 @@ public class Funcionario implements Serializable {
 		return qtdHorasTrabalhoDia;
 	}
 
+	@Transient
+	public Optional<Float> getQtdHorasTrabalhoDiaOpt() {
+		return Optional.ofNullable(qtdHorasTrabalhoDia);
+	}
+
 	/**
 	 * @param qtdHorasTrabalhoDia the qtdHorasTrabalhoDia to set
 	 */
@@ -179,16 +184,16 @@ public class Funcionario implements Serializable {
 		this.qtdHorasTrabalhoDia = qtdHorasTrabalhoDia;
 	}
 
-	@Transient
-	public Optional<Float> getQtdHorasTrabalhoDiaOpt() {
-		return Optional.ofNullable(qtdHorasTrabalhoDia);
-	}
-
 	/**
 	 * @return the qtdHorasAlmoco
 	 */
 	public Float getQtdHorasAlmoco() {
 		return qtdHorasAlmoco;
+	}
+
+	@Transient
+	public Optional<Float> getQtdHorasAlmocoOpt() {
+		return Optional.ofNullable(qtdHorasAlmoco);
 	}
 
 	/**
