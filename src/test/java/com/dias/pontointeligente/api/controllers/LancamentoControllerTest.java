@@ -46,7 +46,7 @@ public class LancamentoControllerTest {
 	@MockBean
 	private FuncionarioService funcionarioService;
 
-	private static final String URL_BASE = "/api/lancamentos";
+	private static final String URL_BASE = "/api/lancamentos/";
 	private static final Long ID_FUNCIONARIO = 1L;
 	private static final Long ID_LANCAMENTO = 1L;
 	private static final String TIPO = TipoEnum.INICIO_TRABALHO.name();
@@ -57,34 +57,39 @@ public class LancamentoControllerTest {
 	@Test
 	@WithMockUser
 	public void testCadastrarLancamento() throws Exception {
+
 		Lancamento lancamento = obterDadosLancamento();
+
 		BDDMockito.given(this.funcionarioService.buscarPorId(Mockito.anyLong()))
 				.willReturn(Optional.of(new Funcionario()));
+
 		BDDMockito.given(this.lancamentoService.persistir(Mockito.any(Lancamento.class))).willReturn(lancamento);
 
 		mvc.perform(MockMvcRequestBuilders.post(URL_BASE).content(this.obterJsonRequisicaoPost())
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-				.andExpect(jsonPath("$.data.id").value(ID_LANCAMENTO)).andExpect(jsonPath("$.data.tipo").value(TIPO))
-				.andExpect(jsonPath("$.data.data").value(this.dateFormat.format(DATA)))
-				.andExpect(jsonPath("$.data.funcionarioId").value(ID_FUNCIONARIO))
-				.andExpect(jsonPath("$.errors").isEmpty());
+				.andExpect(jsonPath("$.dados.id").value(ID_LANCAMENTO)).andExpect(jsonPath("$.dados.tipo").value(TIPO))
+				.andExpect(jsonPath("$.dados.data").value(this.dateFormat.format(DATA)))
+				.andExpect(jsonPath("$.dados.funcionarioId").value(ID_FUNCIONARIO))
+				.andExpect(jsonPath("$.erros").isEmpty());
 	}
 
 	@Test
 	@WithMockUser
 	public void testCadastrarLancamentoFuncionarioIdInvalido() throws Exception {
+
 		BDDMockito.given(this.funcionarioService.buscarPorId(Mockito.anyLong())).willReturn(Optional.empty());
 
 		mvc.perform(MockMvcRequestBuilders.post(URL_BASE).content(this.obterJsonRequisicaoPost())
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.errors").value("Funcionário não encontrado. ID inexistente."))
-				.andExpect(jsonPath("$.data").isEmpty());
+				.andExpect(jsonPath("$.erros").value("Funcionário não encontrado. ID inexistente."))
+				.andExpect(jsonPath("$.dados").isEmpty());
 	}
 
 	@Test
 	@WithMockUser(username = "admin@admin.com", roles = { "ADMIN" })
 	public void testRemoverLancamento() throws Exception {
+
 		BDDMockito.given(this.lancamentoService.buscarPorId(Mockito.anyLong()))
 				.willReturn(Optional.of(new Lancamento()));
 
@@ -95,6 +100,7 @@ public class LancamentoControllerTest {
 	@Test
 	@WithMockUser
 	public void testRemoverLancamentoAcessoNegado() throws Exception {
+
 		BDDMockito.given(this.lancamentoService.buscarPorId(Mockito.anyLong()))
 				.willReturn(Optional.of(new Lancamento()));
 

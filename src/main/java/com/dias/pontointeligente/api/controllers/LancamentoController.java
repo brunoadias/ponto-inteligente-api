@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -137,6 +138,9 @@ public class LancamentoController {
 	}
 
 	@DeleteMapping(value = "/{id}")
+	// Determina que apenas usuários com permissão de administrador
+	// podem excluir um lançamento
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<Response<String>> remover(@PathVariable("id") Long id) {
 		log.info("Removendo lançamento: {}", id);
 		Response<String> response = new Response<>();
