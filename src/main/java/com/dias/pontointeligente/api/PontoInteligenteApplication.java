@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.EnableCaching;
 //Anotation para habilitar cache na aplicação
 @EnableCaching
 public class PontoInteligenteApplication {
+
 	public static void main(String[] args) {
 		SpringApplication.run(PontoInteligenteApplication.class, args);
 	}
